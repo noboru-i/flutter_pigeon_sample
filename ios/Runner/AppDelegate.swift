@@ -8,6 +8,9 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+      
+      let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
+      BatteryApiSetup.setUp(binaryMessenger: controller as! FlutterBinaryMessenger, api: BatteryApiImplementation())
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

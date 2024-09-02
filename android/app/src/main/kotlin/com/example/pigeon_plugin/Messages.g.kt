@@ -86,10 +86,9 @@ private object MessagesPigeonCodec : StandardMessageCodec() {
   }
 }
 
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface BatteryApi {
-  fun getBatteryLevel(callback: (Result<BatteryResult>) -> Unit)
+  fun getBatteryLevel(): BatteryResult
 
   companion object {
     /** The codec used by BatteryApi. */
@@ -104,15 +103,12 @@ interface BatteryApi {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_pigeon_sample.BatteryApi.getBatteryLevel$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            api.getBatteryLevel{ result: Result<BatteryResult> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getBatteryLevel())
+            } catch (exception: Throwable) {
+              wrapError(exception)
             }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

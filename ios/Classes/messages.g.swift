@@ -125,10 +125,9 @@ class messagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = messagesPigeonCodec(readerWriter: messagesPigeonCodecReaderWriter())
 }
 
-
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol BatteryApi {
-  func getBatteryLevel(completion: @escaping (Result<BatteryResult, Error>) -> Void)
+  func getBatteryLevel() throws -> BatteryResult
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -140,13 +139,11 @@ class BatteryApiSetup {
     let getBatteryLevelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.flutter_pigeon_sample.BatteryApi.getBatteryLevel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getBatteryLevelChannel.setMessageHandler { _, reply in
-        api.getBatteryLevel { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
+        do {
+          let result = try api.getBatteryLevel()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
         }
       }
     } else {

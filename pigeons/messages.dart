@@ -12,6 +12,5 @@ class BatteryResult {
 
 @HostApi()
 abstract class BatteryApi {
-  @async
   BatteryResult getBatteryLevel();
 }
