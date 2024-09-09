@@ -34,7 +34,7 @@ class BatteryApiImplementation(private val context: Context) : BatteryApi {
                 || status == BatteryManager.BATTERY_STATUS_FULL
 
         return BatteryResult(
-            level = (level * 100 / scale.toFloat()).toLong(), isCharging = isCharging
+            level = (level * 100 / scale.toFloat()).toLong(), isCharging
         )
     }
 }
